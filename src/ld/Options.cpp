@@ -3440,7 +3440,7 @@ void Options::checkIllegalOptionCombinations()
 		// verify no segment is in zero page
 		if ( fZeroPageSize != ULLONG_MAX ) {
 			for (std::vector<SegmentStart>::iterator it = fCustomSegmentAddresses.begin(); it != fCustomSegmentAddresses.end(); ++it) {
-				if ( (it->address >= 0) && (it->address < fZeroPageSize) )
+				if ( it->address < fZeroPageSize )
 					throwf("-segaddr %s 0x%llX conflicts with -pagezero_size", it->name, it->address);
 			}
 		}
