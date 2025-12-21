@@ -352,7 +352,7 @@ std::vector<class ObjectFile::Atom*>&	Reader<A>::getAtoms()
 	}
 	else if ( fOptions.fLoadAllObjcObjectsFromArchives ) {
 		// build vector of all atoms from all .o files containing objc classes in this archive
-		for(class NameToEntryMap::iterator it = fHashTable.begin(); it != fHashTable.end(); ++it) {
+		for(typename NameToEntryMap::iterator it = fHashTable.begin(); it != fHashTable.end(); ++it) {
 			if ( (strncmp(it->first, ".objc_c", 7) == 0) || (strncmp(it->first, "_OBJC_CLASS_$_", 14) == 0) ) {
 				const Entry* member = (Entry*)&fFileContent[E::get32(it->second->ran_off)];
 				if ( fInstantiatedEntries.count(member) == 0 ) {
@@ -399,7 +399,7 @@ bool  Reader<A>::optimize(const std::vector<ObjectFile::Atom*>& allAtoms, std::v
 template <typename A>
 ConstRanLibPtr  Reader<A>::ranlibHashSearch(const char* name)
 {
-	class NameToEntryMap::iterator pos = fHashTable.find(name);
+	typename NameToEntryMap::iterator pos = fHashTable.find(name);
 	if ( pos != fHashTable.end() )
 		return pos->second;
 	else
