@@ -645,7 +645,7 @@ template <typename A>
 class MachHeaderAtom : public WriterAtom<A>
 {
 public:
-													MachHeaderAtom(Writer<A>& writer) : WriterAtom<A>(writer, headerSegment(writer)) {}
+													MachHeaderAtom(Writer<A>& writer) : WriterAtom<A>(writer, this->headerSegment(writer)) {}
 	virtual const char*								getName() const;
 	virtual const char*								getDisplayName() const;
 	virtual ObjectFile::Atom::Scope					getScope() const;
@@ -681,7 +681,7 @@ template <typename A>
 class LoadCommandAtom : public WriterAtom<A>
 {
 protected:
-											LoadCommandAtom(Writer<A>& writer) : WriterAtom<A>(writer, headerSegment(writer)), fOrdinal(fgCurrentOrdinal++) {}
+											LoadCommandAtom(Writer<A>& writer) : WriterAtom<A>(writer, this->headerSegment(writer)), fOrdinal(fgCurrentOrdinal++) {}
 	virtual ObjectFile::Alignment			getAlignment() const	{ return ObjectFile::Alignment(log2(sizeof(typename A::P::uint_t))); }
 	virtual const char*						getSectionName() const	{ return "._load_commands"; }
 	virtual uint32_t						getOrdinal() const		{ return fOrdinal; }
@@ -954,7 +954,7 @@ class LoadCommandsPaddingAtom : public WriterAtom<A>
 {
 public:
 											LoadCommandsPaddingAtom(Writer<A>& writer)
-													: WriterAtom<A>(writer, headerSegment(writer)), fSize(0) {}
+													: WriterAtom<A>(writer, this->headerSegment(writer)), fSize(0) {}
 	virtual const char*						getDisplayName() const	{ return "header padding"; }
 	virtual uint64_t						getSize() const			{ return fSize; }
 	virtual const char*						getSectionName() const	{ return "._load_cmds_pad"; }
@@ -972,7 +972,7 @@ class MinimalTextAtom : public WriterAtom<A>
 {
 public:
 											MinimalTextAtom(Writer<A>& writer)
-													: WriterAtom<A>(writer, headerSegment(writer)) {}
+													: WriterAtom<A>(writer, this->headerSegment(writer)) {}
 	virtual const char*						getDisplayName() const	{ return "minimal text"; }
 	virtual uint64_t						getSize() const			{ return 0; }
 	virtual const char*						getSectionName() const	{ return "__text"; }
