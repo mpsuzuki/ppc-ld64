@@ -34,15 +34,18 @@
 #include <set>
 #include <algorithm>
 
+#include "mach-o-compact-unwind-shim.hpp"
+
 #include "MachOFileAbstraction.hpp"
 #include "Architectures.hpp"
 #include "ObjectFile.h"
 #include "dwarf2.h"
 #include "debugline.h"
 
-#include <libunwind/DwarfInstructions.hpp>
-#include <libunwind/AddressSpace.hpp>
-#include <libunwind/Registers.hpp>
+// #include <DwarfInstructions.hpp> // maybe in libunwind/
+// #include <AddressSpace.hpp> // maybe in libunwind/
+// #include <Registers.hpp> // maybe in libunwind/
+#include "libunwind-shim.hpp"
 
 //
 //

@@ -33,7 +33,8 @@
 #include <mach-o/ppc/reloc.h>
 #include <mach-o/x86_64/reloc.h>
 #include <mach-o/arm/reloc.h>
-#include <mach-o/compact_unwind_encoding.h>
+// #include <mach-o/compact_unwind_encoding.h>
+#include "mach-o-compact-unwind-shim.hpp"
 #include <mach/machine.h>
 
 #include "FileAbstraction.hpp"
