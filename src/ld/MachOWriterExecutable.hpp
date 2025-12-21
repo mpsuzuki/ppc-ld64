@@ -8796,7 +8796,10 @@ bool Writer<A>::createBranchIslands()
 					int64_t srcAddr = atom->getAddress() + ref->getFixUpOffset();
 					int64_t dstAddr = target.getAddress() + ref->getTargetOffset();
 					int64_t displacement = dstAddr - srcAddr;
-					TargetAndOffset finalTargetAndOffset = { &target, ref->getTargetOffset() };
+					TargetAndOffset finalTargetAndOffset = {
+						&target,
+						static_cast<uint32_t>(ref->getTargetOffset())
+                                        };
 					const int64_t kBranchLimit = kBetweenRegions;
 					if ( displacement > kBranchLimit ) {
 						// create forward branch chain
