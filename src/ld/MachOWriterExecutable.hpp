@@ -1084,8 +1084,8 @@ public:
 protected:
 	typedef typename A::P::uint_t			pint_t;
 	ByteStream								fEncodedData;
-private:
 	using WriterAtom<A>::fWriter;
+private:
 	typedef typename A::P					P;
 };
 
