@@ -8780,8 +8780,8 @@ bool Writer<A>::createBranchIslands()
 		}
 		const int kIslandRegionsCount = fLoadCommandsSegment->fSize / kBetweenRegions;
 		typedef std::map<TargetAndOffset,ObjectFile::Atom*, TargetAndOffsetComparor> AtomToIsland;
-		AtomToIsland regionsMap[kIslandRegionsCount];
-		std::vector<ObjectFile::Atom*> regionsIslands[kIslandRegionsCount];
+		std::vector<AtomToIsland> regionsMap(kIslandRegionsCount);
+		std::vector<std::vector<ObjectFile::Atom*> > regionsIslands(kIslandRegionsCount);
 		unsigned int islandCount = 0;
 		if (log) fprintf(stderr, "ld: will use %u branch island regions\n", kIslandRegionsCount);
 
