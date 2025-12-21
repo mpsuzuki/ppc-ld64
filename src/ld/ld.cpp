@@ -3207,7 +3207,11 @@ const char* Linker::fileArch(const void* p)
 	if ( result != NULL  )
 		 return result;
 		 
+#if SUPPORT_LTO
 	result = lto::Reader::fileKind(bytes);
+#else
+	result = NULL;
+#endif
 	if ( result != NULL  )
 		 return result;
 	
