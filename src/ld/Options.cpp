@@ -3670,7 +3670,7 @@ void Options::gotoClassicLinker(int argc, const char* argv[])
 	argv[0] = "ld_classic";
 	char rawPath[PATH_MAX];
 	char path[PATH_MAX];
-	uint32_t bufSize = PATH_MAX;
+	unsigned long bufSize = PATH_MAX;
 	if ( _NSGetExecutablePath(rawPath, &bufSize) != -1 ) {
 		if ( realpath(rawPath, path) != NULL ) {
 			char* lastSlash = strrchr(path, '/');
