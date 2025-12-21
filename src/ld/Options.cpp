@@ -35,6 +35,8 @@
 #include "Architectures.hpp"
 #include "MachOFileAbstraction.hpp"
 
+const char ldVersionString[] = "@(#)PROGRAM:ld  PROJECT:ld64-97.17 (ppc+ppc64+i386+x86_64)\n";
+
 extern void printLTOVersion(Options &opts);
 
 // magic to place command line in crash reports
@@ -2597,7 +2599,7 @@ void Options::buildSearchPaths(int argc, const char* argv[])
 			addStandardLibraryDirectories = false;
 		else if ( strcmp(argv[i], "-v") == 0 ) {
 			fVerbose = true;
-			extern const char ldVersionString[];
+			// extern const char ldVersionString[];
 			fprintf(stderr, "%s", ldVersionString);
 			 // if only -v specified, exit cleanly
 			 if ( argc == 2 ) {
