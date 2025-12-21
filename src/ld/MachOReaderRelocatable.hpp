@@ -998,7 +998,7 @@ AnonymousAtom<A>::AnonymousAtom(Reader<A>& owner, const macho_section<P>* sectio
 	switch ( type ) {
 		case S_ZEROFILL:
 			{
-				asprintf((char**)&fSynthesizedName, "zero-fill-at-0x%08X", addr);
+				asprintf((char**)&fSynthesizedName, "zero-fill-at-0x%08jX", static_cast<intmax_t>(addr));
 			}
 			break;
 		case S_COALESCED:
@@ -1050,7 +1050,7 @@ AnonymousAtom<A>::AnonymousAtom(Reader<A>& owner, const macho_section<P>* sectio
 			}
 			else if ( (fSection->flags() & S_ATTR_SOME_INSTRUCTIONS) != 0 ) {
 				fDontDeadStrip = false;
-				asprintf((char**)&fSynthesizedName, "anon-func-0x%X", addr);
+				asprintf((char**)&fSynthesizedName, "anon-func-0x%jX", static_cast<intmax_t>(addr));
 			}
 			else if ( strncmp(fSection->sectname(), "__gcc_except_tab",16) == 0 ) {
 				fType = ObjectFile::Atom::kLSDAType;
@@ -1088,7 +1088,7 @@ AnonymousAtom<A>::AnonymousAtom(Reader<A>& owner, const macho_section<P>* sectio
 					fSynthesizedName = name;
 				}
 				else {
-					asprintf((char**)&fSynthesizedName, "lutf16-0x%X", addr);
+					asprintf((char**)&fSynthesizedName, "lutf16-0x%jX", static_cast<intmax_t>(addr));
 				}
 			}
 			break;
@@ -1149,10 +1149,10 @@ AnonymousAtom<A>::AnonymousAtom(Reader<A>& owner, const macho_section<P>* sectio
 			}
 			break;
 		case S_MOD_INIT_FUNC_POINTERS:
-				asprintf((char**)&fSynthesizedName, "initializer$%d", (addr - (uint32_t)fSection->addr())/sizeof(pint_t));
+				asprintf((char**)&fSynthesizedName, "initializer$%jd", static_cast<intmax_t>((addr - (uint32_t)fSection->addr())/sizeof(pint_t)));
 				break;
 		case S_MOD_TERM_FUNC_POINTERS:
-				asprintf((char**)&fSynthesizedName, "terminator$%d", (addr - (uint32_t)fSection->addr())/sizeof(pint_t));
+				asprintf((char**)&fSynthesizedName, "terminator$%jd", static_cast<intmax_t>((addr - (uint32_t)fSection->addr())/sizeof(pint_t)));
 				break;
 		case S_SYMBOL_STUBS:
 			{
@@ -1229,7 +1229,7 @@ AnonymousAtom<A>::AnonymousAtom(Reader<A>& owner, const macho_section<P>* sectio
 					if ( closestSym != NULL ) {
 						const char* name = &fOwner.fStrings[closestSym->n_strx()];
 						char* str;
-						asprintf(&str, "%s+%u$non_lazy_ptr", name, nonLazyPtrValue - closestSym->n_value());
+						asprintf(&str, "%s+%ju$non_lazy_ptr", name, static_cast<uintmax_t>(nonLazyPtrValue - closestSym->n_value()));
 						fSynthesizedName = str;
 					}
 					else {
@@ -1388,7 +1388,7 @@ const char* AnonymousAtom<A>::getDisplayName() const
 		asprintf((char**)&fDisplayName, "atom string literal: \"%s\"", (char*)(fOwner.fHeader)+fileOffset);
 	}
 	else {
-		asprintf((char**)&fDisplayName, "%s@%d", fSection->sectname(), fAddress - (uint32_t)fSection->addr() );
+		asprintf((char**)&fDisplayName, "%s@%ju", fSection->sectname(), static_cast<uintmax_t>(fAddress - (uint32_t)fSection->addr()) );
 	}
 	return fDisplayName;
 }
