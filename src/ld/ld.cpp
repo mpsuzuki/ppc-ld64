@@ -56,6 +56,7 @@ extern "C" double log2 ( double );
 #include <AvailabilityMacros.h>
 #include <cstdlib>
 
+#include "compat-cpp11.hpp"
 #include "configure.h"
 #include "Options.h"
 
@@ -2702,7 +2703,7 @@ void Linker::collectStabs(ObjectFile::Reader* reader, std::map<const class Objec
 				}
 				else {
 					// end SO, record hi/low atoms for this SO range
-					soRanges.push_back(std::make_pair<ObjectFile::Atom*,ObjectFile::Atom*>(atomWithLowestOrdinal, atomWithHighestOrdinal));
+					soRanges.push_back(MAKE_PAIR(atomWithLowestOrdinal, atomWithHighestOrdinal));
 				}
 				// fall through
 			default:
