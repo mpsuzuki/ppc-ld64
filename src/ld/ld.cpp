@@ -41,7 +41,9 @@ extern "C" double log2 ( double );
 #include <mach/mach_init.h>
 #include <mach/mach_host.h>
 #include <dlfcn.h>
+#include <math.h>
 
+#include <utility>
 #include <string>
 #include <map>
 #include <set>
@@ -52,6 +54,7 @@ extern "C" double log2 ( double );
 #include <ext/hash_map>
 #include <dlfcn.h>
 #include <AvailabilityMacros.h>
+#include <cstdlib>
 
 #include "configure.h"
 #include "Options.h"

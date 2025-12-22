@@ -30,6 +30,11 @@
 #include <fcntl.h>
 #include <vector>
 
+#include <cstdlib>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <limits.h>
+
 #include "configure.h"
 #include "Options.h"
 #include "Architectures.hpp"
