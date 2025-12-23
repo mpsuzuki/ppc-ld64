@@ -2375,7 +2375,10 @@ Reader<A>::Reader(const uint8_t* fileContent, const char* path, time_t modTime, 
 					BaseAtom* newAtom = new AnonymousAtom<A>(*this, sect, stringAddr, stringLen);
 					if ( stringLen == 1 ) {
 						// because of padding it may look like there are lots of empty strings, keep track of all
-						emptyStrings.push_back(MAKE_PAIR(stringAddr, newAtom));
+						emptyStrings.push_back(MAKE_PAIR(
+							pint_t, BaseAtom*,
+							stringAddr, newAtom
+						));
 						// record empty string with greatest alignment requirement
 						uint32_t stringAddrTrailingZeros = (stringAddr==0) ? sect->align() : __builtin_ctz(stringAddr);
 						if ( (mostAlignedEmptyString == NULL) 

@@ -2723,7 +2723,10 @@ void Linker::collectStabs(ObjectFile::Reader* reader, std::map<const class Objec
 				}
 				else {
 					// end SO, record hi/low atoms for this SO range
-					soRanges.push_back(MAKE_PAIR(atomWithLowestOrdinal, atomWithHighestOrdinal));
+					soRanges.push_back(MAKE_PAIR(
+						ObjectFile::Atom*, ObjectFile::Atom*,
+						atomWithLowestOrdinal, atomWithHighestOrdinal
+					));
 				}
 				// fall through
 			default:
