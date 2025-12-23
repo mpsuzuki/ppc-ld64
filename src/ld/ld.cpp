@@ -51,12 +51,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
-#if 0
-#include <ext/hash_map>
-#else
-#include <unordered_map>
-#include <unordered_set>
-#endif
+// #include <ext/hash_map> // see CStringHash.hpp
 #include <dlfcn.h>
 #include <AvailabilityMacros.h>
 #include <cstdlib>
@@ -102,13 +97,8 @@ private:
 		bool operator()(Section* left, Section* right);
 	};
 
-#if 0
-	typedef __gnu_cxx::hash_map<const char*, uint32_t, __gnu_cxx::hash<const char*>, CStringEquals> NameToOrdinal;
-	typedef __gnu_cxx::hash_map<const char*, class Section*, __gnu_cxx::hash<const char*>, CStringEquals> NameToSection;
-#else
-	typedef std::unordered_map<const char*, uint32_t, CStringHash, CStringEquals> NameToOrdinal;
-	typedef std::unordered_map<const char*, class Section*, CStringHash, CStringEquals> NameToSection;
-#endif
+	typedef CStringMap<uint32_t> NameToOrdinal;
+	typedef CStringMap<class Section*> NameToSection;
 	//typedef std::map<const char*, class Section*, CStringComparor> NameToSection;
 
 	char			fSectionName[18];
@@ -405,11 +395,7 @@ private:
 	class SymbolTable
 	{
 	public:
-#if 0
-		typedef __gnu_cxx::hash_map<const char*, ObjectFile::Atom*, __gnu_cxx::hash<const char*>, CStringEquals> Mapper;
-#else
-		typedef std::unordered_map<const char*, ObjectFile::Atom*, CStringHash, CStringEquals> Mapper;
-#endif
+		typedef CStringMap<ObjectFile::Atom*> Mapper;
 
 							SymbolTable(Linker&);
 		void				require(const char* name);
@@ -456,15 +442,9 @@ private:
 		uint32_t						offset;
 		const char*						probeName;
 	};
-#if 0
-	typedef __gnu_cxx::hash_map<const char*, std::vector<DTraceProbeInfo>, __gnu_cxx::hash<const char*>, CStringEquals>	ProviderToProbes;
-	typedef	__gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  CStringSet;
-	typedef __gnu_cxx::hash_map<const char*, ObjectFile::Reader*, __gnu_cxx::hash<const char*>, CStringEquals>	InstallNameToReader;
-#else
-	typedef std::unordered_map<const char*, std::vector<DTraceProbeInfo>, CStringHash, CStringEquals>	ProviderToProbes;
-	typedef	std::unordered_set<const char*, CStringHash, CStringEquals>  CStringSet;
-	typedef std::unordered_map<const char*, ObjectFile::Reader*, CStringHash, CStringEquals>	InstallNameToReader;
-#endif
+	typedef CStringMap<std::vector<DTraceProbeInfo> >	ProviderToProbes;
+	// global CStringSet works for private CStringSet;
+	typedef CStringMap<ObjectFile::Reader*>	InstallNameToReader;
 
 	struct IndirectLibrary {
 		const char*							path;
@@ -2627,11 +2607,7 @@ struct HeaderRange {
 };
 
 
-#if 0
-typedef __gnu_cxx::hash_map<const char*, std::vector<uint32_t>, __gnu_cxx::hash<const char*>, CStringEquals> PathToSums;
-#else
-typedef std::unordered_map<const char*, std::vector<uint32_t>, CStringHash, CStringEquals> PathToSums;
-#endif
+typedef CStringMap<std::vector<uint32_t> > PathToSums;
 
 // hash table that maps header path to a vector of known checksums for that path
 static PathToSums sKnownBINCLs;
@@ -2926,11 +2902,7 @@ void Linker::synthesizeDebugNotes(std::vector<class ObjectFile::Atom*>& allAtoms
 	const char* filename = NULL;
 	bool wroteStartSO = false;
 	bool useZeroOSOModTime = (getenv("RC_RELEASE") != NULL);
-#if 0
-	__gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  seenFiles;
-#else
-	std::unordered_set<const char*, CStringHash, CStringEquals>  seenFiles;
-#endif
+	CStringSet  seenFiles;
 	for (std::vector<ObjectFile::Atom*>::iterator it=allAtomsByReader.begin(); it != allAtomsByReader.end(); it++) {
 		ObjectFile::Atom* atom = *it;
 		const char* newDirPath;

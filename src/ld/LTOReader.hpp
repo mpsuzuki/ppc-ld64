@@ -28,15 +28,8 @@
 #include <stdlib.h>
 #include <mach-o/dyld.h>
 #include <vector>
-#if 0
-#include <ext/hash_set>
-#include <ext/hash_map>
-#else
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#endif
+// #include <ext/hash_set> // see CStringHash.hpp
+// #include <ext/hash_map> // see CStringHash.hpp
 
 #include "CStringHash.hpp"
 
@@ -301,14 +294,9 @@ public:
 
 private:
 
-#if 0
-	typedef	__gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  CStringSet;
-	typedef __gnu_cxx::hash_map<const char*, Atom*, __gnu_cxx::hash<const char*>, CStringEquals> CStringToAtom;
-#else
-	typedef	std::unordered_set<const char*, CStringHash, CStringEquals>  CStringSet;
-	typedef std::unordered_map<const char*, Atom*, CStringHash, CStringEquals> CStringToAtom;
-#endif
-	
+	// global CStringSet is same with private CStringSet;
+	typedef CStringMap<Atom*> CStringToAtom;
+
 	ObjectFile::Reader*								makeMachOReader(const uint8_t* p, size_t len, uint32_t nextInputOrdinal);
 	static const char*								tripletPrefixForArch(cpu_type_t);
 

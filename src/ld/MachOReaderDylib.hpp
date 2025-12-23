@@ -34,13 +34,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
-#if 0
-#include <ext/hash_map>
-#else
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#endif
+// #include <ext/hash_map> // see CStringHash.hpp
 
 #include "CStringHash.hpp"
 
@@ -271,13 +265,8 @@ private:
 	typedef typename A::P::E					E;
 
 	struct AtomAndWeak { ObjectFile::Atom* atom; bool weak; uint32_t ordinal; };
-#if 0
-	typedef __gnu_cxx::hash_map<const char*, AtomAndWeak, __gnu_cxx::hash<const char*>, CStringEquals> NameToAtomMap;
-	typedef __gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  NameSet;
-#else
-	typedef std::unordered_map<const char*, AtomAndWeak, CStringHash, CStringEquals> NameToAtomMap;
-	typedef std::unordered_set<const char*, CStringHash, CStringEquals>  NameSet;
-#endif
+	typedef CStringMap<AtomAndWeak> NameToAtomMap;
+	typedef CStringSet NameSet;
 	typedef typename NameToAtomMap::iterator		NameToAtomMapIterator;
 
 	struct PathAndFlag { const char* path; bool reExport; };
@@ -556,22 +545,14 @@ void Reader<A>::buildExportHashTableFromSymbolTable(const macho_dysymtab_command
 		if ( fgLogHashtable ) fprintf(stderr, "ld: building hashtable of %u toc entries for %s\n", dynamicInfo->nextdefsym(), this->getPath());
 		const macho_nlist<P>* start = &symbolTable[dynamicInfo->iextdefsym()];
 		const macho_nlist<P>* end = &start[dynamicInfo->nextdefsym()];
-#if 0
 		fAtoms.resize(dynamicInfo->nextdefsym()); // set initial bucket count
-#else
-		fAtoms.reserve(dynamicInfo->nextdefsym()); // set initial bucket count
-#endif
 		for (const macho_nlist<P>* sym=start; sym < end; ++sym) {
 			this->addSymbol(&strings[sym->n_strx()], (sym->n_desc() & N_WEAK_DEF) != 0);
 		}
 	}
 	else {
 		int32_t count = dynamicInfo->ntoc();
-#if 0
 		fAtoms.resize(count); // set initial bucket count
-#else
-		fAtoms.reserve(count); // set initial bucket count
-#endif
 		if ( fgLogHashtable ) fprintf(stderr, "ld: building hashtable of %u entries for %s\n", count, this->getPath());
 		const struct dylib_table_of_contents* toc = (dylib_table_of_contents*)(fileContent + dynamicInfo->tocoff());
 		for (int32_t i = 0; i < count; ++i) {

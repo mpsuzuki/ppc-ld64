@@ -35,11 +35,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
-#if 0
-#include <ext/hash_map>
-#else
-#include <unordered_map>
-#endif
+// #include <ext/hash_map> // see CStringHash.hpp
 
 #include "CStringHash.hpp"
 
@@ -101,11 +97,7 @@ private:
 
 	};
 
-#if 0
-	typedef __gnu_cxx::hash_map<const char*, const struct ranlib*, __gnu_cxx::hash<const char*>, CStringEquals> NameToEntryMap;
-#else
-	typedef std::unordered_map<const char*, const struct ranlib*, CStringHash, CStringEquals> NameToEntryMap;
-#endif
+	typedef CStringMap<const struct ranlib*> NameToEntryMap;
 
 	typedef typename A::P							P;
 	typedef typename A::P::E						E;

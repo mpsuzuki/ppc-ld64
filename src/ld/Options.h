@@ -30,15 +30,8 @@
 #include <mach/machine.h>
 
 #include <vector>
-#if 0
-#include <ext/hash_set>
-#include <ext/hash_map>
-#else
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#endif
+// #include <ext/hash_set> // see CStringHash.hpp
+// #include <ext/hash_map> // see CStringHash.hpp
 
 #include "CStringHash.hpp"
 #include "ObjectFile.h"
@@ -243,13 +236,8 @@ public:
 	bool						objCABIVersion2POverride() { return fObjCABIVersion2POverride; }
 
 private:
-#if 0
-	typedef __gnu_cxx::hash_map<const char*, unsigned int, __gnu_cxx::hash<const char*>, CStringEquals> NameToOrder;
-	typedef __gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  NameSet;
-#else
-	typedef std::unordered_map<const char*, unsigned int, CStringHash, CStringEquals> NameToOrder;
-	typedef std::unordered_set<const char*, CStringHash, CStringEquals>  NameSet;
-#endif
+	typedef CStringMap<unsigned int> NameToOrder;
+	typedef CStringSet  NameSet;
 	enum ExportMode { kExportDefault, kExportSome, kDontExportSome };
 	enum LibrarySearchMode { kSearchDylibAndArchiveInEachDir, kSearchAllDirsForDylibsThenAllDirsForArchives };
 	enum InterposeMode { kInterposeNone, kInterposeAllExternal, kInterposeSome };
