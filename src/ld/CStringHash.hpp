@@ -21,8 +21,15 @@ struct CStringHash {
     }
 };
 
+#if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION > 1000)
+ #define HAS_CXX11_LIB 1
+#elif defined(__GLIBCXX__) && (__GLIBCXX__ > 20130322)
+ #define HAS_CXX11_LIB 1
+#else
+ #define HAS_CXX11_LIB 0
+#endif
 
-#if __cplusplus >= 201103L
+#if HAS_CXX11_LIB
   #include <map>
   #include <unordered_map>
 #else
@@ -33,7 +40,7 @@ struct CStringHash {
 template <typename V>
 class CStringMap {
 public:
-#if __cplusplus >= 201103L
+#if HAS_CXX11_LIB
     using MapT = std::unordered_map<const char*, V, CStringHash, CStringEquals>;
     using iterator = typename MapT::iterator;
     using const_iterator = typename MapT::const_iterator;
@@ -49,7 +56,7 @@ public:
 
     // for backward compatibility name of method is lined to C++03 GNU extension.
     void resize(size_t n) {
-#if __cplusplus >= 201103L
+#if HAS_CXX11_LIB
         map_.reserve(n);
 #else
         map_.resize(n);
@@ -69,7 +76,7 @@ private:
     MapT map_;
 };
 
-#if __cplusplus >= 201103L
+#if HAS_CXX11_LIB
   #include <set>
   #include <unordered_set>
   using CStringSet = std::unordered_set<const char*, CStringHash, CStringEquals>;
