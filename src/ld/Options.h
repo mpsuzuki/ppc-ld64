@@ -243,11 +243,6 @@ public:
 	bool						objCABIVersion2POverride() { return fObjCABIVersion2POverride; }
 
 private:
-	class CStringEquals
-	{
-	public:
-		bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
-	};
 #if 0
 	typedef __gnu_cxx::hash_map<const char*, unsigned int, __gnu_cxx::hash<const char*>, CStringEquals> NameToOrder;
 	typedef __gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  NameSet;

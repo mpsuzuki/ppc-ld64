@@ -101,11 +101,6 @@ private:
 
 	};
 
-	class CStringEquals
-	{
-	public:
-		bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
-	};
 #if 0
 	typedef __gnu_cxx::hash_map<const char*, const struct ranlib*, __gnu_cxx::hash<const char*>, CStringEquals> NameToEntryMap;
 #else

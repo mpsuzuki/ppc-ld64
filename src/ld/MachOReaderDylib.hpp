@@ -270,11 +270,6 @@ private:
 	typedef typename A::P						P;
 	typedef typename A::P::E					E;
 
-	class CStringEquals
-	{
-	public:
-		bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
-	};
 	struct AtomAndWeak { ObjectFile::Atom* atom; bool weak; uint32_t ordinal; };
 #if 0
 	typedef __gnu_cxx::hash_map<const char*, AtomAndWeak, __gnu_cxx::hash<const char*>, CStringEquals> NameToAtomMap;

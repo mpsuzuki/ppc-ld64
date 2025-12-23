@@ -1434,12 +1434,6 @@ private:
 };
 
 
-class CStringEquals
-{
-public:
-	bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
-};
-
 template <typename A>
 class StringsLinkEditAtom : public LinkEditAtom<A>
 {
