@@ -35,7 +35,13 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#if 0
 #include <ext/hash_map>
+#else
+#include <unordered_map>
+#endif
+
+#include "CStringhash.hpp"
 
 #include "MachOFileAbstraction.hpp"
 #include "ObjectFile.h"
@@ -100,7 +106,11 @@ private:
 	public:
 		bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
 	};
+#if 0
 	typedef __gnu_cxx::hash_map<const char*, const struct ranlib*, __gnu_cxx::hash<const char*>, CStringEquals> NameToEntryMap;
+#else
+	typedef std::unordered_map<const char*, const struct ranlib*, CStringHash, CStringEquals> NameToEntryMap;
+#endif
 
 	typedef typename A::P							P;
 	typedef typename A::P::E						E;

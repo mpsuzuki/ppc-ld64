@@ -38,11 +38,17 @@
 #include <algorithm>
 #include <map>
 #include <set>
+#if 0
 #include <ext/hash_map>
+#else
+#include <unordered_map>
+#endif
 
 #include "ObjectFile.h"
 #include "ExecutableFile.h"
 #include "Options.h"
+
+#include "CStringHash.hpp"
 
 #include "MachOFileAbstraction.hpp"
 #include "MachOTrie.hpp"
@@ -1453,7 +1459,11 @@ private:
 	using WriterAtom<A>::fWriter;
 	typedef typename A::P					P;
 	enum { kBufferSize = 0x01000000 };
+#if 0
 	typedef __gnu_cxx::hash_map<const char*, int32_t, __gnu_cxx::hash<const char*>, CStringEquals> StringToOffset;
+#else
+	typedef std::unordered_map<const char*, int32_t, CStringHash, CStringEquals> StringToOffset;
+#endif
 
 	std::vector<char*>						fFullBuffers;
 	char*									fCurrentBuffer;

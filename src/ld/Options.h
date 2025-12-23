@@ -30,9 +30,17 @@
 #include <mach/machine.h>
 
 #include <vector>
+#if 0
 #include <ext/hash_set>
 #include <ext/hash_map>
+#else
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#endif
 
+#include "CStringHash.hpp"
 #include "ObjectFile.h"
 
 extern void throwf (const char* format, ...) __attribute__ ((noreturn,format(printf, 1, 2)));
@@ -240,8 +248,13 @@ private:
 	public:
 		bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
 	};
+#if 0
 	typedef __gnu_cxx::hash_map<const char*, unsigned int, __gnu_cxx::hash<const char*>, CStringEquals> NameToOrder;
 	typedef __gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  NameSet;
+#else
+	typedef std::unordered_map<const char*, unsigned int, CStringHash, CStringEquals> NameToOrder;
+	typedef std::unordered_set<const char*, CStringHash, CStringEquals>  NameSet;
+#endif
 	enum ExportMode { kExportDefault, kExportSome, kDontExportSome };
 	enum LibrarySearchMode { kSearchDylibAndArchiveInEachDir, kSearchAllDirsForDylibsThenAllDirsForArchives };
 	enum InterposeMode { kInterposeNone, kInterposeAllExternal, kInterposeSome };

@@ -28,8 +28,17 @@
 #include <stdlib.h>
 #include <mach-o/dyld.h>
 #include <vector>
+#if 0
 #include <ext/hash_set>
 #include <ext/hash_map>
+#else
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#endif
+
+#include "CStringHash.hpp"
 
 #include "MachOFileAbstraction.hpp"
 #include "Architectures.hpp"
@@ -297,8 +306,13 @@ private:
 	public:
 		bool operator()(const char* left, const char* right) const { return (strcmp(left, right) == 0); }
 	};
+#if 0
 	typedef	__gnu_cxx::hash_set<const char*, __gnu_cxx::hash<const char*>, CStringEquals>  CStringSet;
 	typedef __gnu_cxx::hash_map<const char*, Atom*, __gnu_cxx::hash<const char*>, CStringEquals> CStringToAtom;
+#else
+	typedef	std::unordered_set<const char*, CStringHash, CStringEquals>  CStringSet;
+	typedef std::unordered_map<const char*, Atom*, CStringHash, CStringEquals> CStringToAtom;
+#endif
 	
 	ObjectFile::Reader*								makeMachOReader(const uint8_t* p, size_t len, uint32_t nextInputOrdinal);
 	static const char*								tripletPrefixForArch(cpu_type_t);
