@@ -41,7 +41,7 @@
 #include <unordered_map>
 #endif
 
-#include "CStringhash.hpp"
+#include "CStringHash.hpp"
 
 #include "MachOFileAbstraction.hpp"
 #include "ObjectFile.h"
