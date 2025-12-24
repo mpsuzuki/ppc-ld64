@@ -30,7 +30,7 @@ SRCS_CPP = $(wildcard src/ld/*.cpp)
 SRCS_C = $(wildcard src/ld/*.c)
 OBJS = $(SRCS_CPP:.cpp=.o) $(SRCS_C:.c=.o)
 
-all: ld libprune_trie.a
+all: ld64 libprune_trie.a
 
 %.o: %.c
 	$(CC) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
@@ -40,16 +40,16 @@ all: ld libprune_trie.a
 	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
 		$(CXXFLAGS) -c $< -o $@
 
-ld: $(OBJS)
+ld64: $(OBJS)
 	$(CXX) -o $@ $(OBJS) $(LDFLAGS) $(LIBS)
 
 clean:
 	rm -f $(OBJS) ld
 	rm -f PruneTrie.o libprune_trie.a
 
-install: ld
+install: ld64
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	install -m 755 ld $(DESTDIR)$(PREFIX)/bin/ld64
+	install -m 755 ld64 $(DESTDIR)$(PREFIX)/bin/ld64
 
 libprune_trie.a: PruneTrie.o
 	$(AR) $(ARFLAGS) $@ $^
