@@ -1,16 +1,16 @@
 PREFIX ?= /opt/local
-CXX = clang++ -std=c++11
-# CXX = clang++ -std=c++03
+# CXX = clang++ -std=c++11
+CXX = clang++ -std=c++03
 CC = clang
 
-# CCTOOLS = ../cctools-795
-# CCTOOLS_INCLUDES = -I$(CCTOOLS)/include
-CCTOOLS_INCLUDES = -I$(PREFIX)/include/ppc-cctools
+CCTOOLS ?= ./cctools
+CCTOOLS_INCLUDES ?= -I$(CCTOOLS)/include
+# CCTOOLS_INCLUDES = -I$(PREFIX)/include/ppc-cctools
 
-# LLDB = ../lldb
-# UNWIND = $(LLDB)/source/Plugins/Process/Utility/libunwind/
-# UNWIND_INCLUDES = -I$(UNWIND)/include -I$(UNWIND)/src
-UNWIND_INCLUDES = -I$(PREFIX)/include/ppc-libunwind
+LLDB ?= ./lldb
+UNWIND ?= $(LLDB)/source/Plugins/Process/Utility/libunwind/
+UNWIND_INCLUDES ?= -I$(UNWIND)/include -I$(UNWIND)/src
+# UNWIND_INCLUDES = -I$(PREFIX)/include/ppc-libunwind
 
 INCLUDES = \
 	$(CCTOOLS_INCLUDES) $(UNWIND_INCLUDES) \
