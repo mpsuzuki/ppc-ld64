@@ -30,7 +30,7 @@ SRCS_CPP = $(wildcard src/ld/*.cpp)
 SRCS_C = $(wildcard src/ld/*.c)
 OBJS = $(SRCS_CPP:.cpp=.o) $(SRCS_C:.c=.o)
 
-all: ld64 libprune_trie.a
+all: ld64 libprunetrie.a
 
 %.o: %.c
 	$(CC) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
@@ -45,21 +45,21 @@ ld64: $(OBJS)
 
 clean:
 	rm -f $(OBJS) ld
-	rm -f PruneTrie.o libprune_trie.a
+	rm -f PruneTrie.o libprunetrie.a
 
 install: ld64
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	install -m 755 ld64 $(DESTDIR)$(PREFIX)/bin/ld64
 
-libprune_trie.a: PruneTrie.o
+libprunetrie.a: PruneTrie.o
 	$(AR) $(ARFLAGS) $@ $^
 
 PruneTrie.o: src/other/PruneTrie.cpp
 	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
 		$(CXXFLAGS) -Isrc/other -o $@ -c $<
 
-install-prune-trie: libPruneTrie.a
-	mkdir -p $(DESTDIR)$(PREFIX)/include/ppc-ld64/
-	install -m 744 src/other/prune_trie.h $(DESTDIR)$(PREFIX)/include/ppc-ld64/
+install-prune-trie: libprunetrie.a
+	mkdir -p $(DESTDIR)$(PREFIX)/include/ppc-ld64/mach-o
+	install -m 744 src/other/prune_trie.h $(DESTDIR)$(PREFIX)/include/ppc-ld64/mach-o
 	mkdir -p $(DESTDIR)$(PREFIX)/libexec/ppc-ld64/
-	install -m 744 libPruneTrie.a $(DESTDIR)$(PREFIX)/libexec/ppc-ld64/
+	install -m 744 libprunetrie.a $(DESTDIR)$(PREFIX)/libexec/ppc-ld64/
