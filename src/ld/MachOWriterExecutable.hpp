@@ -1909,7 +1909,7 @@ HybridStubHelperAtom<x86_64>::HybridStubHelperAtom(Writer<x86_64>& writer, Objec
 	: StubHelperAtom<x86_64>(writer, target, lazyPointer, forLazyDylib)
 {
 	if ( fgHelperHelperAtom == NULL ) {
-		fgHelperHelperAtom = new HybridStubHelperHelperAtom<x86_64>::HybridStubHelperHelperAtom(fWriter);
+		fgHelperHelperAtom = new HybridStubHelperHelperAtom<x86_64>(fWriter);
 		fWriter.fAllSynthesizedStubHelpers.push_back(fgHelperHelperAtom);
 	}
 	fReferences.push_back(new WriterReference<x86_64>(8,  x86_64::kPCRel32, &fLazyPointerAtom));
@@ -1957,7 +1957,7 @@ FastStubHelperAtom<x86_64>::FastStubHelperAtom(Writer<x86_64>& writer, ObjectFil
 	: StubHelperAtom<x86_64>(writer, target, lazyPointer, forLazyDylib)
 {
 	if ( fgHelperHelperAtom == NULL ) {
-		fgHelperHelperAtom = new FastStubHelperHelperAtom<x86_64>::FastStubHelperHelperAtom(fWriter);
+		fgHelperHelperAtom = new FastStubHelperHelperAtom<x86_64>(fWriter);
 		fWriter.fAllSynthesizedStubHelpers.push_back(fgHelperHelperAtom);
 	}
 	fReferences.push_back(new WriterReference<x86_64>(6, x86_64::kPCRel32, fgHelperHelperAtom));
@@ -2062,7 +2062,7 @@ FastStubHelperAtom<arm>::FastStubHelperAtom(Writer<arm>& writer, ObjectFile::Ato
 	: StubHelperAtom<arm>(writer, target, lazyPointer, forLazyDylib)
 {
 	if ( fgHelperHelperAtom == NULL ) {
-		fgHelperHelperAtom = new FastStubHelperHelperAtom<arm>::FastStubHelperHelperAtom(fWriter);
+		fgHelperHelperAtom = new FastStubHelperHelperAtom<arm>(fWriter);
 		fWriter.fAllSynthesizedStubHelpers.push_back(fgHelperHelperAtom);
 	}
 	fReferences.push_back(new WriterReference<arm>(4, arm::kBranch24, fgHelperHelperAtom));
@@ -2191,7 +2191,7 @@ HybridStubHelperAtom<x86>::HybridStubHelperAtom(Writer<x86>& writer, ObjectFile:
 	: StubHelperAtom<x86>(writer, target, lazyPointer, forLazyDylib)
 {
 	if ( fgHelperHelperAtom == NULL ) {
-		fgHelperHelperAtom = new HybridStubHelperHelperAtom<x86>::HybridStubHelperHelperAtom(fWriter);
+		fgHelperHelperAtom = new HybridStubHelperHelperAtom<x86>(fWriter);
 		fWriter.fAllSynthesizedStubHelpers.push_back(fgHelperHelperAtom);
 	}	
 	fReferences.push_back(new WriterReference<x86>(6,  x86::kAbsolute32, &fLazyPointerAtom));
@@ -2239,7 +2239,7 @@ FastStubHelperAtom<x86>::FastStubHelperAtom(Writer<x86>& writer, ObjectFile::Ato
 	: StubHelperAtom<x86>(writer, target, lazyPointer, forLazyDylib)
 {
 	if ( fgHelperHelperAtom == NULL ) {
-		fgHelperHelperAtom = new FastStubHelperHelperAtom<x86>::FastStubHelperHelperAtom(fWriter);
+		fgHelperHelperAtom = new FastStubHelperHelperAtom<x86>(fWriter);
 		fWriter.fAllSynthesizedStubHelpers.push_back(fgHelperHelperAtom);
 	}
 	fReferences.push_back(new WriterReference<x86>(6, x86::kPCRel32, fgHelperHelperAtom));
