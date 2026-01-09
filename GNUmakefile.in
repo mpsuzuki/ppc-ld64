@@ -1,0 +1,73 @@
+.PHONY: clean distclean
+
+PREFIX ?= @prefix@
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@
+
+CC = @CC@
+CFLAGS = @CFLAGS@
+
+CCTOOLS ?= @CCTOOLS@
+CCTOOLS_INCLUDES ?= -I$(CCTOOLS)/include
+# CCTOOLS_INCLUDES = -I$(PREFIX)/include/ppc-cctools
+
+LLDB ?= @LLDB@
+UNWIND ?= @UNWIND@
+UNWIND_INCLUDES ?= -I$(UNWIND)/include -I$(UNWIND)/src
+# UNWIND_INCLUDES = -I$(PREFIX)/include/ppc-libunwind
+
+INCLUDES = \
+	$(CCTOOLS_INCLUDES) $(UNWIND_INCLUDES) \
+	-Isrc/ld -Isrc/abstraction
+
+DEFINES = \
+	-DSUPPORT_ARCH_i386 -DSUPPORT_ARCH_x86_64 \
+	-DSUPPORT_ARCH_ppc -DSUPPORT_ARCH_ppc64
+
+OPTFLAGS = -O0
+DEBUGFLAGS = -g0
+
+LDFLAGS ?=
+LIBS ?=
+
+SRCS_CPP = $(wildcard src/ld/*.cpp)
+SRCS_C = $(wildcard src/ld/*.c)
+OBJS = $(SRCS_CPP:.cpp=.o) $(SRCS_C:.c=.o)
+
+all: ld64 libprunetrie.a
+
+%.o: %.c
+	$(CC) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
+		$(CFLAGS) -c $< -o $@
+
+%.o: %.cpp
+	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
+		$(CXXFLAGS) -c $< -o $@
+
+ld64: $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LIBS)
+
+clean:
+	rm -f $(OBJS) ld
+	rm -f PruneTrie.o libprunetrie.a
+
+distclean: clean
+	rm -rf autom4te.cache configure~
+	rm -f GNUmakefile config.status config.log
+
+install: ld64
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	install -m 755 ld64 $(DESTDIR)$(PREFIX)/bin/ld64
+
+libprunetrie.a: PruneTrie.o
+	$(AR) $(ARFLAGS) $@ $^
+
+PruneTrie.o: src/other/PruneTrie.cpp
+	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
+		$(CXXFLAGS) -Isrc/other -o $@ -c $<
+
+install-prune-trie: libprunetrie.a
+	mkdir -p $(DESTDIR)$(PREFIX)/include/ppc-ld64/mach-o
+	install -m 744 src/other/prune_trie.h $(DESTDIR)$(PREFIX)/include/ppc-ld64/mach-o
+	mkdir -p $(DESTDIR)$(PREFIX)/libexec/ppc-ld64/
+	install -m 744 libprunetrie.a $(DESTDIR)$(PREFIX)/libexec/ppc-ld64/
