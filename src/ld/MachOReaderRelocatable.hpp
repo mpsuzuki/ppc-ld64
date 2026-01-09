@@ -35,7 +35,7 @@
 #include <algorithm>
 
 #include "mach-o-compact-unwind-shim.hpp"
-#include "compat-cpp11.hpp"
+#include "compat-make-pair.hpp"
 
 #include "MachOFileAbstraction.hpp"
 #include "Architectures.hpp"

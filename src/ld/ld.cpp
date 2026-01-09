@@ -56,7 +56,7 @@
 #include <AvailabilityMacros.h>
 #include <cstdlib>
 
-#include "compat-cpp11.hpp"
+#include "compat-make-pair.hpp"
 #include "CStringHash.hpp"
 
 #include "configure.h"
