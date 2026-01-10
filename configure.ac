@@ -1,6 +1,31 @@
 AC_PREREQ([2.62])
 AC_INIT([ppc-ld64], [0.0.20260109], [https://github.com/mpsuzuki/ppc-ld64/-/issues])
 
+#
+# AC_CANONICAL_HOST is expected in future version
+#
+uname_m=`uname -m`
+case "${uname_m}" in
+x86_64|amd64)
+  # CFLAGS_DEFAULT_TARGET=-Ddefault_is_x86_64
+  ;;
+i[3-9]86)
+  # CFLAGS_DEFAULT_TARGET=-Ddefault_is_i386
+  ;;
+ppc64|powerpc64)
+  # CFLAGS_DEFAULT_TARGET=-Ddefault_is_ppc64
+  ;;
+ppc|powerpc)
+  # CFLAGS_DEFAULT_TARGET=-Ddefault_is_ppc
+  ;;
+*)
+  AC_MSG_WARN([* CPU of this host, ${uname_m}, is unknown for cctool, defaulting to PPC])
+  CFLAGS_DEFAULT_TARGET=-Ddefault_is_ppc
+  ;;
+esac
+CFLAGS="${CFLAGS} ${CFLAGS_DEFAULT_TARGET}"
+CXXFLAGS="${CXXFLAGS} ${CFLAGS_DEFAULT_TARGET}"
+
 AC_CHECK_PROGS(INSTALL, [ginstall gnu-install install.gnu install installbsd])
 AC_SUBST(INSTALL)
 

@@ -622,15 +622,15 @@ cpu_type_t Linker::inferArchitecture()
 
 	// no thin .o files found, so default to same architecture this was built as
 	warning("-arch not specified");
-#if __ppc__
+#if __ppc__ || defined(default_is_powerpc) || defined(default_is_ppc)
 	return CPU_TYPE_POWERPC;
-#elif __i386__
+#elif __i386__ || defined(default_is_i386)
 	return CPU_TYPE_I386;
-#elif __ppc64__
+#elif __ppc64__ || defined(default_is_powerpc64) || defined(default_is_ppc64)
 	return CPU_TYPE_POWERPC64;
-#elif __x86_64__
+#elif __x86_64__ || defined(default_is_x86_64)
 	return CPU_TYPE_X86_64;
-#elif __arm__
+#elif __arm__ || defined(default_is_arm)
 	return CPU_TYPE_ARM;
 #else
 	#error unknown default architecture
