@@ -87,9 +87,7 @@ AC_ARG_WITH([cctools],[AS_HELP_STRING([--with-cctools],
   ],[CCTOOLS="${withval}"],[CCTOOLS=./cctools])
 AC_SUBST([CCTOOLS])
 
-AC_MSG_CHECKING([whether type of the 2nd argument _NSGetExecutablePath() in cctools is uint32_t*])
-CXXFLAGS_save="${CXXFLAGS}"
-CXXFLAGS="${CXXFLAGS} -I${CCTOOLS}/include"
+AC_MSG_CHECKING([whether type of the 2nd argument _NSGetExecutablePath() is uint32_t*])
 AC_COMPILE_IFELSE(
   [AC_LANG_PROGRAM([#include <mach-o/dyld.h>],[
       uint32_t bufSize = 1024;
@@ -103,7 +101,6 @@ AC_COMPILE_IFELSE(
     DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32="-UNS_GET_EXECUTABLE_PATH_BUF_UINT32"
   ]
 )
-CXXFLAGS="${CXXFLAGS_save}"
 AC_SUBST(DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32)
 
 

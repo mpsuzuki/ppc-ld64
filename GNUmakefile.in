@@ -16,10 +16,14 @@ UNWIND ?= @UNWIND@
 UNWIND_INCLUDES ?= -I$(UNWIND)/include -I$(UNWIND)/src
 # UNWIND_INCLUDES = -I$(PREFIX)/include/ppc-libunwind
 
-INCLUDES = \
+INCLUDES_TARGET = \
 	$(CCTOOLS_INCLUDES) $(UNWIND_INCLUDES) \
 	-Isrc/ld -Isrc/abstraction
 
+INCLUDES_HOST = \
+	$(UNWIND_INCLUDES) \
+	-Isrc/ld -Isrc/abstraction \
+	$(patsubst -I%,-idirafter %,$(CCTOOLS_INCLUDES))
 
 DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32 ?= @DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32@
 DEFINES = \
@@ -33,18 +37,28 @@ DEBUGFLAGS = -g0
 LDFLAGS ?=
 LIBS ?=
 
-SRCS_CPP = $(wildcard src/ld/*.cpp)
 SRCS_C = $(wildcard src/ld/*.c)
-OBJS = $(SRCS_CPP:.cpp=.o) $(SRCS_C:.c=.o)
+OBJS_C = $(SRCS_C:.c=.o)
+
+SRCS_CPP_HOST = src/ld/Options.cpp
+SRCS_CPP_TARGET = $(filter-out $(SRCS_CPP_HOST), $(wildcard src/ld/*.cpp))
+OBJS_CPP_HOST = $(SRCS_CPP_HOST:.cpp=.o)
+OBJS_CPP_TARGET = $(SRCS_CPP_TARGET:.cpp=.o)
+
+OBJS = $(OBJS_C) $(OBJS_CPP_HOST) $(OBJS_CPP_TARGET)
 
 all: ld64 libprunetrie.a
 
-%.o: %.c
-	$(CC) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
+$(OBJS_C): %.o: %.c
+	$(CC) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES_TARGET) \
 		$(CFLAGS) -c $< -o $@
 
-%.o: %.cpp
-	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
+$(OBJS_CPP_HOST): %.o: %.cpp
+	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES_HOST) \
+		$(CXXFLAGS) -c $< -o $@
+
+$(OBJS_CPP_TARGET): %.o: %.cpp
+	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES_TARGET) \
 		$(CXXFLAGS) -c $< -o $@
 
 ld64: $(OBJS)
@@ -66,7 +80,7 @@ libprunetrie.a: PruneTrie.o
 	$(AR) $(ARFLAGS) $@ $^
 
 PruneTrie.o: src/other/PruneTrie.cpp
-	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES) \
+	$(CXX) $(OPTFLAGS) $(DEBUGFLAGS) $(DEFINES) $(INCLUDES_TARGET) \
 		$(CXXFLAGS) -Isrc/other -o $@ -c $<
 
 install-prune-trie: libprunetrie.a
