@@ -87,6 +87,26 @@ AC_ARG_WITH([cctools],[AS_HELP_STRING([--with-cctools],
   ],[CCTOOLS="${withval}"],[CCTOOLS=./cctools])
 AC_SUBST([CCTOOLS])
 
+AC_MSG_CHECKING([whether type of the 2nd argument _NSGetExecutablePath() in cctools is uint32_t*])
+CXXFLAGS_save="${CXXFLAGS}"
+CXXFLAGS="${CXXFLAGS} -I${CCTOOLS}/include"
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM([#include <mach-o/dyld.h>],[
+      uint32_t bufSize = 1024;
+      _NSGetExecutablePath(NULL, &bufSize);
+    ])
+  ],[
+    AC_MSG_RESULT([yes])
+    DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32="-DNS_GET_EXECUTABLE_PATH_BUF_UINT32=1"
+  ],[
+    AC_MSG_RESULT([no])
+    DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32="-UNS_GET_EXECUTABLE_PATH_BUF_UINT32"
+  ]
+)
+CXXFLAGS="${CXXFLAGS_save}"
+AC_SUBST(DEFINE_NS_GET_EXECUTABLE_PATH_BUF_UINT32)
+
+
 AC_ARG_WITH([lldb],[AS_HELP_STRING([--with-lldb],
     [specify dirname of lldb that has source/Plugins/Process/Utility/libunwind])
   ],[LLDB="${withval}"],[LLDB=./LLDB])
